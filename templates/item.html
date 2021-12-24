@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gallery</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    </head>
+    <body>
+		<div>
+			{% for video in videos %}
+			<video src="/static/{{sd}}/{{video}}" controls></video>
+			{% endfor %}
+		</div>
+		<div>
+            {% for image in images|sort %}
+			<a href="/static/{{sd}}/{{image}}">
+            <img src="/static/{{sd}}/{{image}}" style="display:block"/>
+			</a>
+            {% endfor %}
+		</div>
+    </body>
+</html>

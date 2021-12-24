@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gallery</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    </head>
+    <body> 
+        <ul id="container">
+            {% for dir in dirs %}
+			<a href="/item/{{dir}}">
+			<img src="/image/{{dir}}" width="200" height="200">
+			</a>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gallery</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" href="{{ url_for('static',    filename='login.css') }}">
+    </head>
+    <body>
+        <h1>Login</h1>
+        <form method="post" action="/login">
+            <input type="text" class="form-control" id="user_id" name="user_id" placeholder="user_id">
+            <input type="password" class="form-control" id="password" name="password" placeholder="password">
+            <button type="submit" class="btn btn-primary btn-block btn-large">Let me in!</button>
+        </form>
+    </body>
+</html>
