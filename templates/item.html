@@ -6,14 +6,14 @@
     </head>
     <body>
 		<div>
-			{% for video in videos %}
-			<video src="/static/{{sd}}/{{video}}" controls></video>
+			{% for vid in vids %}
+            <video src="/{{vid}}" controls></video>
 			{% endfor %}
 		</div>
 		<div>
-            {% for image in images|sort %}
-			<a href="/static/{{sd}}/{{image}}">
-            <img src="/static/{{sd}}/{{image}}" style="display:block"/>
+            {% for img in imgs|sort %}
+            <a href="/{{img}}">
+                <img src="/{{img}}" style="display:block"/>
 			</a>
             {% endfor %}
 		</div>

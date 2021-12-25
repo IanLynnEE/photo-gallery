@@ -6,9 +6,9 @@
     </head>
     <body> 
         <ul id="container">
-            {% for dir in dirs %}
-			<a href="/item/{{dir}}">
-			<img src="/image/{{dir}}" width="200" height="200">
+            {% for dir, img_path in dirs.items() %}
+			<a href="/?path={{dir}}">
+                <img src="/{{img_path}}" width="200" height="200">
 			</a>
             {% endfor %}
         </ul>

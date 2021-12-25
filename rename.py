@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# To make sure {subdir}-001 exit, and all files will be indexed to minimum.
+# To make sure {subdir}-00001 exit, and all files will be indexed to minimum.
 # Do not use os.rename(), so users can think twice.
 
 import os
@@ -14,7 +14,7 @@ def is_numeric_string(string):
 sh = open('rename.sh', 'w')
 sh.write('#!/bin/sh\nset -e\n\n')
 
-for sd in os.listdir():
+for sd in os.listdir('static'):
     if not os.path.isdir(sd):
         continue
     if not is_numeric_string(sd):
