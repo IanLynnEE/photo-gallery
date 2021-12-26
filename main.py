@@ -3,7 +3,7 @@ sys.path.append('src')
 
 import single_page
 import all_page
-import from_clipboard
+import from_soup
 
 url = input('URL: ')
 
@@ -27,11 +27,11 @@ else:
     soup = BeautifulSoup(HTML, 'lxml')
     url = soup.find('link', {'rel': 'canonical'}).get('href')
     if 'aliexpress' in url:     
-        from_clipboard.aliex(url, soup)
+        from_soup.aliex(url, soup)
     elif 'taobao' in url:      
-        from_clipboard.taobao(url, soup)
+        from_soup.taobao(url, soup)
     elif 'tmall' in url:       
-        from_clipboard.taobao(url,soup)
+        from_soup.taobao(url,soup)
     else:
         print('Error! Unsupported website.')
     # Clear clipboard

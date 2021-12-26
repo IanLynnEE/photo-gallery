@@ -8,11 +8,10 @@ from bs4 import BeautifulSoup
 import download
 
 def aliex(url, soup):
-    os.chdir('aliex')
     bool_download_video = (input('Download Video? ') == 'y')
     bool_download_content = (input('Download Content? ') == 'y')
-    
     ID = url.split('/')[-1].split('.')[0]
+    os.chdir('aliex')
     if os.path.isdir(ID):
         input('Directory existed!')
     else:
@@ -32,16 +31,15 @@ def aliex(url, soup):
                 img_src = img.get('src')
                 if img_src == None:
                     continue
-                download.taobao_image(img_src, ID, i) 
+                download.single_image(img_src, '.', ID, i) 
                 i += 1
     return
 
 
 def taobao(url, soup):
-    os.chdir('taobao')
     bool_download_content = (input('Download Content? ') == 'y')
-
     ID = url.split('=')[-1]
+    os.chdir('taobao')
     if os.path.isdir(ID):
         os.system(f'open {os.getcwd()}/{ID}')
         input('Directory existed!')
@@ -60,14 +58,14 @@ def taobao(url, soup):
             img_src = img.get('src')
             if img_src[0] == '/':
                 img_src = 'https:' + img_src
-            download.taobao_image(img_src, ID, i)
+            download.single_image(img_src, '.', ID, i)
             i += 1
     
     comment = soup.find(id='image-list')
     if comment is not None:
         for p in comment.find_all('p'):
            img_src = p.get_text().replace('_40x40.jpg', '')
-           download.taobao_image(img_src, ID, i)
+           download.single_image(img_src, '.', ID, i)
            i += 1
     print('Stored in directory:', os.getcwd())
     return

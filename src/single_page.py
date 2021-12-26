@@ -21,8 +21,7 @@ def dropship(root_url):
     div = soup.find('div', class_='viewimg_list')
     for j, img in enumerate(div.find_all('img')):
         img_url = 'https:' + img.get('src').split('?')[0] 
-        name = f'static/dropship/dropship-{i:03d}{j:02d}.jpg'
-        download.single_image(img_url, name)
+        download.single_image(img_url, 'static/dropship', i, j)
     return
 
 def kiskissing(root_url):
@@ -38,8 +37,7 @@ def kiskissing(root_url):
     div = soup.find('div', class_='MagicToolboxSelectorsContainer')
     for j, img in enumerate(div.find_all('a')):
         img_url = img.get('href')
-        name = f'static/kiskissing/kiskissing-{i:03d}{j:02d}.jpg'
-        download.single_image(img_url, name)
+        download.single_image(img_url, 'static/kiskissing', i, j)
     return
 
 def lspace(root_url):
@@ -54,6 +52,5 @@ def lspace(root_url):
     soup = BeautifulSoup(source.text, 'lxml')
     for j, img in enumerate(soup.find_all('img', class_='w-100')):
         img_url = 'https:' + img.get('src')
-        name = f'static/lspace/lspace-{i:03d}{j:02d}.jpg'
-        download.single_image(img_url, name)
+        download.single_image(img_url, 'static/lspace', i, j)
     return
