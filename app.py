@@ -22,7 +22,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'login'
-with open('static/hashed.json') as f:
+with open('hashed.json') as f:
     user_list = json.load(f)
 
 @login_manager.user_loader
