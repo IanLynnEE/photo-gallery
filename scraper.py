@@ -1,6 +1,9 @@
 import sys
 sys.path.append('src')
 
+from bs4 import BeautifulSoup
+import clipboard
+
 import single_page
 import all_page
 import from_soup

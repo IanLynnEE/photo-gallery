@@ -53,7 +53,7 @@ def billabong(root_rul):
             img_url = img.get('src').replace('large', 'hi-res')
             download.single_image(img_url, 'static/billabong', i, j)
         time.sleep(5)
-     with open('static/billabong.txt', 'w') as f:
+    with open('static/billabong.txt', 'w') as f:
         for link in links:
             f.write(link + '\n')
     return

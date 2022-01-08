@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 def single_image(url, folder, ID, NO):
     form = url.split('.')[-1]
-    name = f'{folder}/{ID}-{NO:03d}.{form}'
+    name = f'{folder}/{ID}-{NO:05d}.{form}'
     try:
         img = requests.get(url)
         with open(name, 'wb') as f:

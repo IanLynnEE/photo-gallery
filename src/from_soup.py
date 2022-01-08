@@ -48,7 +48,6 @@ def taobao(url, soup):
     os.chdir(ID)
 
     download.taobao_video(soup, ID) 
-
     bar = soup.find('ul', id='J_UlThumb')
     i = download.taobao_thumbnail(bar, ID)
 
@@ -61,9 +60,9 @@ def taobao(url, soup):
             download.single_image(img_src, '.', ID, i)
             i += 1
     
-    comment = soup.find(id='image-list')
-    if comment is not None:
-        for p in comment.find_all('p'):
+    review = soup.find(id='review-image-list')
+    if review is not None:
+        for p in review.find_all('p'):
            img_src = p.get_text().replace('_40x40.jpg', '')
            download.single_image(img_src, '.', ID, i)
            i += 1
