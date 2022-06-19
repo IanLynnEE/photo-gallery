@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Download all images from certain website, 
+# Download all images from certain website,
 # and save them to static/{website} directory.
 # Will try to read download history from static/{website}.txt.
 
@@ -9,7 +9,8 @@ from bs4 import BeautifulSoup
 
 import download
 
-def bananamoon(root_url):
+
+def bananamoon(root_url: str) -> None:
     with open('static/bananamoon.txt', 'r') as f:
         links = f.read().split()
     start = len(links)
@@ -32,7 +33,8 @@ def bananamoon(root_url):
             f.write(link + '\n')
     return
 
-def billabong(root_rul):
+
+def billabong(root_url: str) -> None:
     with open('static/billabong.txt', 'r') as f:
         links = f.read().split()
     start = len(links)
@@ -58,7 +60,8 @@ def billabong(root_rul):
             f.write(link + '\n')
     return
 
-def bowermillet(root_url):
+
+def bowermillet(root_url: str) -> None:
     with open('static/bowermillet.txt', 'r') as f:
         links = f.read().split()
     start = len(links)
@@ -81,4 +84,3 @@ def bowermillet(root_url):
         for link in links:
             f.write(link + '\n')
     return
-

@@ -7,7 +7,9 @@ from bs4 import BeautifulSoup
 
 import download
 
-def aliex(url, soup):
+
+def aliex(url: str, soup: BeautifulSoup) -> None:
+    print(type(soup))
     bool_download_video = (input('Download Video? ') == 'y')
     bool_download_content = (input('Download Content? ') == 'y')
     ID = url.split('/')[-1].split('.')[0]
@@ -20,19 +22,19 @@ def aliex(url, soup):
         input('Directory existed!')
     else:
         os.mkdir(folder)
-    
+
     if bool_download_video:
         download.taobao_video(soup, folder, ID)
 
     bar = soup.find('ul', class_='images-view-list')
     i = download.taobao_thumbnail(bar, folder, ID)
-       
+
     if bool_download_content:
         content = soup.find('div', class_='product-overview')
         for p in content.find_all('p'):
             for img in p.find_all('img'):
                 img_src = img.get('src')
-                if img_src == None:
+                if img_src is None:
                     continue
                 download.single_image(img_src, folder, ID, i)
                 i += 1
@@ -40,7 +42,7 @@ def aliex(url, soup):
     return
 
 
-def taobao(url, soup):
+def taobao(url: str, soup: BeautifulSoup) -> None:
     bool_download_content = (input('Download Content? ') == 'y')
     ID = url.split('=')[-1]
     folder = f'static/{ID}'
@@ -65,16 +67,12 @@ def taobao(url, soup):
             download.single_image(img_src, folder, ID, i)
             i += 1
     print('Stored in directory:', folder)
-    
-    if not os.path.isdir('static/review'):
-        os.mkdir('static/review')
-    i = 1
+
     review = soup.find(id='review-image-list')
-    if review is not None:
-        for p in review.find_all('p'):
-           img_src = p.get_text().replace('_40x40.jpg', '')
-           download.single_image(img_src, 'static/review', ID, i)
-           i += 1
+    if review is None:
+        return
+    for i, p in enumerate(review.find_all('p')):
+        img_src = p.get_text().replace('_40x40.jpg', '')
+        download.single_image(img_src, 'static/review', ID, i)
     print('Stored in directory: static/review')
     return
-
