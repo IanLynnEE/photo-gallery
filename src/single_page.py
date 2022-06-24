@@ -8,14 +8,18 @@ from bs4 import BeautifulSoup
 import download
 
 
+def _check_history(website: str, url: str) -> int:
+    with open(f'static/{website}.txt', 'r') as f:
+        downloaded_links = f.read().split()
+    if url in downloaded_links:
+        input('Already saved! Press ENTER to download again.')
+    with open(f'static/{website}.txt', 'a') as f:
+        f.write(url + '\n')
+    return len(downloaded_links)
+
+
 def dropship(root_url: str) -> None:
-    with open('static/dropship.txt', 'r') as f:   # a+ fail.
-        links = f.read().split()
-    i = len(links)
-    if root_url in links:
-        input('Already saved! Press any key to download again.')
-    with open('static/dropship.txt', 'a') as f:
-        f.write(root_url + '\n')
+    i = _check_history('dropship', root_url)
     res = requests.get(root_url)
     soup = BeautifulSoup(res.text, 'lxml')
     div = soup.find('div', class_='viewimg_list')
@@ -26,13 +30,7 @@ def dropship(root_url: str) -> None:
 
 
 def kiskissing(root_url: str) -> None:
-    with open('static/kiskissing.txt', 'r') as f:
-        links = f.read().split()
-    i = len(links)
-    if root_url in links:
-        input('Already saved! Press any key to download again.')
-    with open('static/kiskissing.txt', 'a') as f:
-        f.write(root_url + '\n')
+    i = _check_history('kiskissing', root_url)
     res = requests.get(root_url)
     soup = BeautifulSoup(res.text, 'lxml')
     div = soup.find('div', class_='MagicToolboxSelectorsContainer')
@@ -43,16 +41,21 @@ def kiskissing(root_url: str) -> None:
 
 
 def lspace(root_url: str) -> None:
-    with open('static/lspace.txt', 'r') as f:
-        links = f.read().split()
-    i = len(links)
-    if root_url in links:
-        input('Already saved! Press any key to download again.')
-    with open('static/lspace.txt', 'a') as f:
-        f.write(root_url + '\n')
+    i = _check_history('lspace', root_url)
     source = requests.get(root_url)
     soup = BeautifulSoup(source.text, 'lxml')
     for j, img in enumerate(soup.find_all('img', class_='w-100')):
         img_url = 'https:' + img.get('src')
         download.single_image(img_url, 'static/lspace', i, j)
+    return
+
+
+def smolensk(url: str) -> None:
+    i = _check_history('smolensk', url)
+    res = requests.get(url)
+    soup = BeautifulSoup(res.text, 'lxml')
+    div = soup.find('div', class_='detail_big_pic')
+    for j, img in enumerate(div.find_all('a')):
+        img_url = 'https://xn--80ajegaffddjnjizgfue.xn--p1ai' + img.get('href')
+        download.single_image(img_url, 'static/smolensk', i, j)
     return
