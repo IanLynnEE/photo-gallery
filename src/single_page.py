@@ -5,7 +5,24 @@
 import requests
 from bs4 import BeautifulSoup
 
-import download
+from src import download
+
+
+support_websites = ['dropship', 'kiskissing', 'lspace', 'smolensk']
+
+
+def match(url: str) -> bool:
+    if 'dropship' in url:
+        dropship(url)
+    elif 'kiskissing' in url:
+        kiskissing(url)
+    elif 'lspace' in url:
+        lspace(url)
+    elif '80ajegaffddjnjizgfue' in url:
+        smolensk(url)
+    else:
+        return False
+    return True
 
 
 def _check_history(website: str, url: str) -> int:

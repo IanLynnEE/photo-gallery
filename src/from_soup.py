@@ -4,12 +4,31 @@
 import os
 
 from bs4 import BeautifulSoup
+import clipboard
 
-import download
+from src import download
+
+
+support_websites = ['aliex', 'review']
+
+
+def match() -> bool:
+    input('Try to analyse HTML from clipboard. Press any key to start...')
+    HTML = str(clipboard.paste())
+    soup = BeautifulSoup(HTML, 'lxml')
+    url = soup.find('link', {'rel': 'canonical'}).get('href')
+    if 'aliexpress' in url:
+        aliex(url, soup)
+    elif 'taobao' in url:
+        taobao(url, soup)
+    elif 'tmall' in url:
+        taobao(url, soup)
+    else:
+        return False
+    return True
 
 
 def aliex(url: str, soup: BeautifulSoup) -> None:
-    print(type(soup))
     bool_download_video = (input('Download Video? ') == 'y')
     bool_download_content = (input('Download Content? ') == 'y')
     ID = url.split('/')[-1].split('.')[0]

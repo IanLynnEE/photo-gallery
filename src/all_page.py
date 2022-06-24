@@ -7,7 +7,22 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
-import download
+from src import download
+
+
+support_websites = ['bananamoon', 'billabong', 'bowermillet']
+
+
+def match(url: str) -> bool:
+    if 'bananamoon' in url:
+        bananamoon(url)
+    elif 'billabong' in url:
+        billabong(url)
+    elif 'bowermillet' in url:
+        bowermillet(url)
+    else:
+        return False
+    return True
 
 
 def bananamoon(root_url: str) -> None:
