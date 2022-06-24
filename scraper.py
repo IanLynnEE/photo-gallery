@@ -1,13 +1,13 @@
-import src
+import spiders
 
 
 def main():
     root_url = input('URL: ')
-    if src.single_page.match(root_url):
+    if spiders.single_page.match(root_url):
         return
-    if src.all_page.match(root_url):
+    if spiders.all_page.match(root_url):
         return
-    if src.from_soup.match():
+    if spiders.from_soup.match():
         return
     print('Error! Unsupported website.')
 

@@ -5,7 +5,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-from src import download
+from . import download
 
 
 support_websites = ['dropship', 'kiskissing', 'lspace', 'smolensk']

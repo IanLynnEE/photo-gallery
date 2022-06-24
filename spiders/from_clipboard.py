@@ -6,7 +6,7 @@ import os
 from bs4 import BeautifulSoup
 import clipboard
 
-from src import download
+from . import download
 
 
 support_websites = ['aliex', 'review']

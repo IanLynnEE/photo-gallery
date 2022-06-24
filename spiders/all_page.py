@@ -7,7 +7,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
-from src import download
+from . import download
 
 
 support_websites = ['bananamoon', 'billabong', 'bowermillet']
