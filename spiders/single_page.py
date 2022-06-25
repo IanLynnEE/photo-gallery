@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from . import download
 
 
-support_websites = ['dropship', 'lspace', 'myroxyfoxy', 'smolensk']
+support_websites = ['dropship', 'lspace', 'myroxyfoxy', 'zabota', 'smolensk']
 
 
 def match(url: str) -> bool:
@@ -18,6 +18,8 @@ def match(url: str) -> bool:
         lspace(url)
     elif 'myroxyfoxy' in url:
         myroxyfoxy(url)
+    elif 'zabota' in url:
+        zabota(url)
     elif '80ajegaffddjnjizgfue' in url:
         smolensk(url)
     else:
@@ -64,6 +66,16 @@ def myroxyfoxy(url: str) -> None:
     for j, img in enumerate(soup.find_all('img', class_='cnt_item')):
         img_url = 'https://myroxyfoxy.ru' + img.get('src')
         download.single_image(img_url, 'static/myroxyfoxy', i, j)
+    return
+
+
+def zabota(url: str) -> None:
+    i = _check_history('zabota', url)
+    res = requests.get(url)
+    soup = BeautifulSoup(res.text, 'lxml')
+    for j, img in enumerate(soup.find_all('a', class_='thumblisticon')):
+        img_url = img.get('href')
+        download.single_image(img_url, 'static/zabota', i, j)
     return
 
 
