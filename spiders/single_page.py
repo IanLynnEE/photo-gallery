@@ -8,16 +8,16 @@ from bs4 import BeautifulSoup
 from . import download
 
 
-support_websites = ['dropship', 'kiskissing', 'lspace', 'smolensk']
+support_websites = ['dropship', 'lspace', 'myroxyfoxy', 'smolensk']
 
 
 def match(url: str) -> bool:
     if 'dropship' in url:
         dropship(url)
-    elif 'kiskissing' in url:
-        kiskissing(url)
     elif 'lspace' in url:
         lspace(url)
+    elif 'myroxyfoxy' in url:
+        myroxyfoxy(url)
     elif '80ajegaffddjnjizgfue' in url:
         smolensk(url)
     else:
@@ -46,24 +46,24 @@ def dropship(root_url: str) -> None:
     return
 
 
-def kiskissing(root_url: str) -> None:
-    i = _check_history('kiskissing', root_url)
-    res = requests.get(root_url)
-    soup = BeautifulSoup(res.text, 'lxml')
-    div = soup.find('div', class_='MagicToolboxSelectorsContainer')
-    for j, img in enumerate(div.find_all('a')):
-        img_url = img.get('href')
-        download.single_image(img_url, 'static/kiskissing', i, j)
-    return
-
-
 def lspace(root_url: str) -> None:
     i = _check_history('lspace', root_url)
     source = requests.get(root_url)
     soup = BeautifulSoup(source.text, 'lxml')
-    for j, img in enumerate(soup.find_all('img', class_='w-100')):
-        img_url = 'https:' + img.get('src')
+    div = soup.find('div', class_='gallery-thumbs')
+    for j, img in enumerate(div.find_all('img', class_='w-100')):
+        img_url = 'https:' + img.get('src').replace('_600x@2x.progressive', '')
         download.single_image(img_url, 'static/lspace', i, j)
+    return
+
+
+def myroxyfoxy(url: str) -> None:
+    i = _check_history('myroxyfoxy', url)
+    res = requests.get(url)
+    soup = BeautifulSoup(res.text, 'lxml')
+    for j, img in enumerate(soup.find_all('img', class_='cnt_item')):
+        img_url = 'https://myroxyfoxy.ru' + img.get('src')
+        download.single_image(img_url, 'static/myroxyfoxy', i, j)
     return
 
 
