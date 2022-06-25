@@ -9,19 +9,19 @@ import clipboard
 from . import download
 
 
-support_websites = ['aliex', 'review', 'wildberries']
+support_websites = ['aliexpress', 'taobao', 'review', 'wildberries']
 
 
 def match() -> bool:
     input('Try to analyse HTML from clipboard. Press any key to start...')
     HTML = str(clipboard.paste())
-    soup = BeautifulSoup(HTML, 'lxml')
+    soup = BeautifulSoup(HTML, 'html.parser')
     try:
         url = soup.find('link', {'rel': 'canonical'}).get('href')
     except AttributeError:
         url = soup.find('base').get('href')
     if 'aliexpress' in url:
-        aliex(url, soup)
+        aliexpress(url, soup)
     elif 'taobao' in url:
         taobao(url, soup)
     elif 'tmall' in url:
@@ -41,10 +41,10 @@ def wildberries(soup: BeautifulSoup) -> None:
     return
 
 
-def aliex(url: str, soup: BeautifulSoup) -> None:
+def aliexpress(url: str, soup: BeautifulSoup) -> None:
     bool_download_content = (input('Download Content? ') == 'y')
     ID = url.split('/')[-1].split('.')[0]
-    folder = f'static/aliex/{ID}'
+    folder = f'static/aliexpress/{ID}'
     if os.path.isdir(folder):
         input('Directory existed!')
     else:
@@ -70,7 +70,7 @@ def aliex(url: str, soup: BeautifulSoup) -> None:
 def taobao(url: str, soup: BeautifulSoup) -> None:
     bool_download_content = (input('Download Content? ') == 'y')
     ID = url.split('=')[-1]
-    folder = f'static/{ID}'
+    folder = f'static/taobao/{ID}'
     if os.path.isdir(folder):
         input('Directory existed!')
     else:

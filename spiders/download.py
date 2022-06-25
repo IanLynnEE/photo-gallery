@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import os
+import subprocess
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -14,7 +15,7 @@ def single_image(url: str, folder: str, ID: str, NO: int) -> bool:
             f.write(img.content)
         print(f'{NO:3d}: {url}')
         return True
-    except:
+    except requests.exceptions.RequestException:
         print('Fail:', url)
         return False
     return False
@@ -45,8 +46,7 @@ def taobao_video(soup: BeautifulSoup, folder: str, ID: str) -> bool:
         video_url = video.get('src')
     if video_url[0] == '/':
         video_url = 'https:' + video_url
-    cmd = f'ffmpeg -i "{video_url}" {folder}/{ID}.mp4'
-    os.system(cmd)
+    subprocess.run(['ffmpeg', '-i', video_url, f'{folder}/{ID}.mp4'])
     print('Vid:', video_url)
     return True
 
