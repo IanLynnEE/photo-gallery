@@ -9,42 +9,48 @@ import clipboard
 from . import download
 
 
-support_websites = ['aliex', 'review']
+support_websites = ['aliex', 'review', 'wildberries']
 
 
 def match() -> bool:
     input('Try to analyse HTML from clipboard. Press any key to start...')
     HTML = str(clipboard.paste())
     soup = BeautifulSoup(HTML, 'lxml')
-    url = soup.find('link', {'rel': 'canonical'}).get('href')
+    try:
+        url = soup.find('link', {'rel': 'canonical'}).get('href')
+    except AttributeError:
+        url = soup.find('base').get('href')
     if 'aliexpress' in url:
         aliex(url, soup)
     elif 'taobao' in url:
         taobao(url, soup)
     elif 'tmall' in url:
         taobao(url, soup)
+    elif 'wildberries' in url:
+        wildberries(soup)
     else:
         return False
     return True
 
 
+def wildberries(soup: BeautifulSoup) -> None:
+    same_series_ul = soup.find_all('ul', class_='swiper-wrapper')[1]
+    for link in same_series_ul.find_all('a', class_='img-plug'):
+        serial = link.get('href').split('/')[4]
+        download.wildberries_images('static/wildberries', serial)
+    return
+
+
 def aliex(url: str, soup: BeautifulSoup) -> None:
-    bool_download_video = (input('Download Video? ') == 'y')
     bool_download_content = (input('Download Content? ') == 'y')
     ID = url.split('/')[-1].split('.')[0]
     folder = f'static/aliex/{ID}'
-    if not os.path.isdir('static'):
-        os.mkdir('static')
-    if not os.path.isdir('static/aliex'):
-        os.mkdir('static/aliex')
     if os.path.isdir(folder):
         input('Directory existed!')
     else:
         os.mkdir(folder)
 
-    if bool_download_video:
-        download.taobao_video(soup, folder, ID)
-
+    download.taobao_video(soup, folder, ID)
     bar = soup.find('ul', class_='images-view-list')
     i = download.taobao_thumbnail(bar, folder, ID)
 
@@ -57,7 +63,7 @@ def aliex(url: str, soup: BeautifulSoup) -> None:
                     continue
                 download.single_image(img_src, folder, ID, i)
                 i += 1
-    print(f'Stored in directory: static/aliex/{ID}')
+    print(f'Stored in directory: {folder}')
     return
 
 
@@ -65,10 +71,7 @@ def taobao(url: str, soup: BeautifulSoup) -> None:
     bool_download_content = (input('Download Content? ') == 'y')
     ID = url.split('=')[-1]
     folder = f'static/{ID}'
-    if not os.path.isdir('static'):
-        os.mkdir('static')
     if os.path.isdir(folder):
-        os.system(f'open static/{ID}')
         input('Directory existed!')
     else:
         os.mkdir(folder)

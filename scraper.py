@@ -7,7 +7,7 @@ def main():
         return
     if spiders.all_page.match(root_url):
         return
-    if spiders.from_soup.match():
+    if spiders.from_clipboard.match():
         return
     print('Error! Unsupported website.')
 

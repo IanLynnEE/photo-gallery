@@ -20,6 +20,20 @@ def single_image(url: str, folder: str, ID: str, NO: int) -> bool:
     return False
 
 
+def wildberries_images(folder: str, serial: str) -> None:
+    series = int(serial) // 10000 * 10000
+    for j in range(1, 100):
+        name = f'{folder}/{serial}-{j}.jpg'
+        url = f'https://images.wbstatic.net/big/new/{series}/{serial}-{j}.jpg'
+        img = requests.get(url)
+        if 'id="sc404"' in img.text:
+            break
+        with open(name, 'wb') as f:
+            f.write(img.content)
+        print(url)
+    return
+
+
 def taobao_video(soup: BeautifulSoup, folder: str, ID: str) -> bool:
     video = soup.find('video')
     if video is None:
