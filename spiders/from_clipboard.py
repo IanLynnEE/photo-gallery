@@ -61,8 +61,8 @@ def aliexpress(url: str, soup: BeautifulSoup) -> None:
                 img_src = img.get('src')
                 if img_src is None:
                     continue
-                download.single_image(img_src, folder, ID, i)
                 i += 1
+                download.single_image(img_src, folder, ID, i)
     print(f'Stored in directory: {folder}')
     return
 
@@ -76,6 +76,7 @@ def taobao(url: str, soup: BeautifulSoup) -> None:
     else:
         os.mkdir(folder)
 
+    download.get_cached_images_map(url)
     download.taobao_video(soup, folder, ID)
     bar = soup.find('ul', id='J_UlThumb')
     i = download.taobao_thumbnail(bar, folder, ID)
@@ -86,8 +87,8 @@ def taobao(url: str, soup: BeautifulSoup) -> None:
             img_src = img.get('src')
             if img_src[0] == '/':
                 img_src = 'https:' + img_src
-            download.single_image(img_src, folder, ID, i)
             i += 1
+            download.single_image(img_src, folder, ID, i)
     print('Stored in directory:', folder)
 
     review = soup.find(id='review-image-list')

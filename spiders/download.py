@@ -1,14 +1,40 @@
 # -*- coding: utf-8 -*-
 
+import os
 import subprocess
 
 import requests
 from bs4 import BeautifulSoup
 
+cached_images = {}
+
+
+def get_cached_images_map(url: str) -> dict:
+    caches_path = r'/Users/ian/Library/Containers/com.apple.Safari/Data/'\
+            r'Library/Caches/com.apple.Safari/WebKitCache'
+    seach_text = f'href="{url}"'
+    target = subprocess.run(['grep', '-rnwl', caches_path, '-e', seach_text],
+                            capture_output=True, text=True)
+    path = target.stdout.split('\n')[0].split('/')
+    path.pop()
+    path = '/'.join(path)
+    for file in os.listdir(path):
+        if '-blob' in file:
+            continue
+        with open(os.path.join(path, file), 'r', encoding='latin1') as f:
+            head = f.read()
+            url = head.split('ÿ')[0].split('\x01')[-1]
+            cached_images[url] = os.path.join(path, file) + '-blob'
+    return cached_images
+
 
 def single_image(url: str, folder: str, ID: str, NO: int) -> bool:
     form = url.split('.')[-1]
     name = f'{folder}/{ID}-{NO:05d}.{form}'
+    if url in cached_images:
+        subprocess.run(['cp', cached_images[url], name])
+        print(f'{NO:3d}: {url}')
+        return True
     try:
         img = requests.get(url)
         with open(name, 'wb') as f:
