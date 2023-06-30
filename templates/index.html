@@ -4,12 +4,16 @@
         <title>Gallery</title>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     </head>
-    <body> 
+    <body>
         <ul id="container">
-            {% for dir, img_path in dirs.items() %}
+            {% for dir, img_path in dirs.items()|sort(attribute='0') %}
+            {% set caption = dir.split('/')[-1] %}
 			<a href="/?path={{dir}}">
-                <img src="/{{img_path}}" width="200" height="200">
-			</a>
+                <figure style="display:table-cell">
+                    <figcaption >{{caption}}</figcaption>
+                    <img src="/{{img_path}}" width="200" height="200">
+                </figure>
+            </a>
             {% endfor %}
         </ul>
     </body>

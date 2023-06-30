@@ -13,7 +13,7 @@
 		<div>
             {% for img in imgs|sort %}
             <a href="/{{img}}">
-                <img src="/{{img}}" style="display:block"/>
+                <img src="/{{img}}" style="display:block" max-width="100%"/>
 			</a>
             {% endfor %}
 		</div>
