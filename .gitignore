@@ -1,6 +1,13 @@
+# VS Code
+.vscode/
+
+# Downloaded files.
 static/
+
+# Old scripts.
 test/
 
+# User data.
 config.py
 hashed.json
 

@@ -4,7 +4,7 @@
 import os
 
 from bs4 import BeautifulSoup
-import clipboard
+import pyperclip
 
 from . import download
 
@@ -14,7 +14,7 @@ support_websites = ['aliexpress', 'taobao', 'review', 'wildberries']
 
 def match() -> bool:
     input('Try to analyse HTML from clipboard. Press any key to start...')
-    HTML = str(clipboard.paste())
+    HTML = str(pyperclip.paste())
     soup = BeautifulSoup(HTML, 'html.parser')
     try:
         url = soup.find('link', {'rel': 'canonical'}).get('href')
@@ -68,7 +68,6 @@ def aliexpress(url: str, soup: BeautifulSoup) -> None:
 
 
 def taobao(url: str, soup: BeautifulSoup) -> None:
-    bool_download_content = (input('Download Content? ') == 'y')
     ID = url.split('=')[-1]
     folder = f'static/taobao/{ID}'
     if os.path.isdir(folder):
@@ -76,19 +75,17 @@ def taobao(url: str, soup: BeautifulSoup) -> None:
     else:
         os.mkdir(folder)
 
-    download.get_cached_images_map(url)
     download.taobao_video(soup, folder, ID)
     bar = soup.find('ul', id='J_UlThumb')
     i = download.taobao_thumbnail(bar, folder, ID)
 
-    if bool_download_content:
-        content = soup.find(id='description')
-        for img in content.find_all('img'):
-            img_src = img.get('src')
-            if img_src[0] == '/':
-                img_src = 'https:' + img_src
-            i += 1
-            download.single_image(img_src, folder, ID, i)
+    content = soup.find(id='description')
+    for img in content.find_all('img'):
+        img_src = img.get('src')
+        if img_src[0] == '/':
+            img_src = 'https:' + img_src
+        i += 1
+        download.single_image(img_src, folder, ID, i)
     print('Stored in directory:', folder)
 
     review = soup.find(id='review-image-list')
