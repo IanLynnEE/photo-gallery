@@ -47,7 +47,7 @@ def generate_mv_cmd(*, mine: str = None, filename: str = None) -> None | str:
             return
         if is_same_extension(current, suggest):
             return
-        return f'mv -vn {filename}{current} {filename}{suggest}'
+        return f'mv {filename}{current} {filename}{suggest}'
     except IndexError:
         return '# ' + mine
 

@@ -2,6 +2,7 @@
 
 import os
 import subprocess
+import time
 
 import requests
 from bs4 import BeautifulSoup
@@ -11,20 +12,13 @@ from .check_type import generate_mv_cmd
 cached_images = {}
 
 
-def search_caches(url: str) -> bool:
+def search_caches(url: str) -> None:
     """Search in the cache of Safari and find the cached images.
 
     Args:
         url (str): url of an image or a webpage.
-
-    Returns:
-        bool: True if cache hit.
     """
     global cached_images
-
-    cache_hit = False
-    if url in cached_images:
-        return True
 
     # Use `grep` to search in cache directory.
     caches_path = os.path.join(
@@ -47,9 +41,8 @@ def search_caches(url: str) -> bool:
             head = f.read()
             img_url = head.split('ÿ')[0].split('\x01')[-1]
         if os.path.exists(filename + '-blob'):
-            cache_hit = True
             cached_images[img_url] = filename + '-blob'
-    return cache_hit
+    return
 
 
 def single_image(url: str, folder: str, ID: str, NO: int) -> bool:
@@ -59,10 +52,19 @@ def single_image(url: str, folder: str, ID: str, NO: int) -> bool:
     name = os.path.join(folder, f'{ID}-{NO:05d}.{form}')
 
     try:
-        if search_caches(url):
+        if url not in cached_images:
+            search_caches(os.path.dirname(url))
+        if url not in cached_images:
+            search_caches(url)
+        if url in cached_images:
             subprocess.run(['cp', cached_images[url], name])
             print(f'{NO:3d}: (cached) {url}')
         else:
+            # Taobao will not allow us to download images directly.
+            # Make the user open the image in Safari.
+            # Then, user can run the script again to extract images from cache.
+            subprocess.run(['open', '-a', 'Safari', url])
+            time.sleep(1)
             img = requests.get(url)
             with open(name, 'wb') as f:
                 f.write(img.content)
@@ -72,7 +74,7 @@ def single_image(url: str, folder: str, ID: str, NO: int) -> bool:
         return False
 
     if (cmd := generate_mv_cmd(filename=name)) is not None:
-        subprocess.run(cmd, shell=True)
+        subprocess.run(cmd, shell=True, capture_output=True)
     return True
 
 

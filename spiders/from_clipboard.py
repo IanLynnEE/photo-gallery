@@ -7,8 +7,9 @@ from bs4 import BeautifulSoup
 import pyperclip
 
 from . import download
+from .download import cached_images     # noqa: F401
 
-
+# TODO: tmail now uses different HTML structure.
 support_websites = ['aliexpress', 'taobao', 'review', 'wildberries']
 
 
