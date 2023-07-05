@@ -48,6 +48,9 @@ def search_caches(url: str) -> None:
 def single_image(url: str, folder: str, ID: str, NO: int) -> bool:
     global cached_images
 
+    if url.startswith('//'):
+        url = 'https:' + url
+
     form = url.split('.')[-1]
     name = os.path.join(folder, f'{ID}-{NO:05d}.{form}')
 
@@ -59,6 +62,8 @@ def single_image(url: str, folder: str, ID: str, NO: int) -> bool:
         if url in cached_images:
             subprocess.run(['cp', cached_images[url], name])
             print(f'{NO:3d}: (cached) {url}')
+        elif url.endswith('.gif'):
+            print(f'{NO:3d}: (ignored) {url}')
         else:
             # Taobao will not allow us to download images directly.
             # Make the user open the image in Safari.
@@ -110,8 +115,10 @@ def taobao_video(soup: BeautifulSoup, folder: str, ID: str) -> bool:
 
 def taobao_thumbnail(bar: BeautifulSoup, folder: str, ID: str) -> int:
     for i, img in enumerate(bar.find_all('img')):
-        img_src = img.get('src').split('.jpg')[0] + '.jpg'
-        if img_src[0] == '/':
-            img_src = 'https:' + img_src
+        img_src: str = img.get('src').split('.jpg')[0] + '.jpg'
+
+        # Ruten adds '_m' to the end of the thumbnail url (small image).
+        if img_src.endswith('_m.jpg'):
+            img_src = img_src[:-6] + '.jpg'
         single_image(img_src, folder, ID, i)
     return i
