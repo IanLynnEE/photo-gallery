@@ -3,6 +3,7 @@
     <head>
         <title>Gallery</title>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta viewport="width=device-width, initial-scale=1">
     </head>
     <body>
 		<div>
@@ -13,7 +14,7 @@
 		<div>
             {% for img in imgs|sort %}
             <a href="/{{img}}">
-                <img src="/{{img}}" style="display:block" max-width="100%"/>
+                <img src="/{{img}}" style="display:block; max-width: 100%;"/>
 			</a>
             {% endfor %}
 		</div>
